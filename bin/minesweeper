@@ -1,10 +1,25 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 $LOAD_PATH << File.expand_path(File.dirname(__FILE__) + '/../lib')
+require 'commander'
 require 'minesweeper'
 
-def banner
-  puts "minesweeper v#{Minesweeper::VERSION}."
-end
+Commander.configure do
+  program :name, 'Minesweeper'
+  program :version, Minesweeper::VERSION
+  program :description, 'The classic Minesweeper game!'
 
-banner
+  command :new_game do |c|
+    c.action do
+      game = Minesweeper::Game.new
+      until game.over?
+        say game.to_s
+        row, col = ask_for_array 'Place flag? enter \'row col\' eg \'4 6\':'
+        game.place_flag(row.to_i, col.to_i)
+      end
+    end
+  end
+
+  default_command :new_game
+end

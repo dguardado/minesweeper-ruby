@@ -19,6 +19,10 @@ module Minesweeper
       @mine_count -= 1
     end
 
+    def over?
+      state != :in_progress
+    end
+
     def to_s
       result = +''
       result << format_state
