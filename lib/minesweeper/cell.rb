@@ -19,6 +19,15 @@ module Minesweeper
       end
     end
 
+    def remove_flag
+      if flagged?
+        @flagged = false
+        true
+      else
+        false
+      end
+    end
+
     def format
       if flagged?
         '🚩'

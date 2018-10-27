@@ -19,6 +19,11 @@ module Minesweeper
       @mine_count -= 1 if changed
     end
 
+    def remove_flag(row, col)
+      changed = @board[row][col].remove_flag
+      @mine_count += 1 if changed
+    end
+
     def over?
       state != :in_progress
     end
