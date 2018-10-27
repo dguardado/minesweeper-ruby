@@ -12,7 +12,11 @@ module Minesweeper
     end
 
     def place_flag
-      @flagged = true
+      if flagged?
+        false
+      else
+        @flagged = true
+      end
     end
 
     def format

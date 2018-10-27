@@ -15,8 +15,8 @@ module Minesweeper
     end
 
     def place_flag(row, col)
-      @board[row][col].place_flag
-      @mine_count -= 1
+      changed = @board[row][col].place_flag
+      @mine_count -= 1 if changed
     end
 
     def over?
