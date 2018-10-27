@@ -6,11 +6,11 @@ module Minesweeper
     attr_reader :state
     attr_reader :mine_count
 
-    def initialize
+    def initialize(height, width)
       @state = :in_progress
-      @mine_count = 10
-      @height = 9
-      @width = 9
+      @mine_count = 0
+      @height = height
+      @width = width
       @board = new_board
     end
 
