@@ -4,6 +4,7 @@ require 'bundler/setup'
 # Explicitly load any gems you need.
 
 require 'minesweeper/version'
+require 'minesweeper/cell'
 require 'minesweeper/game'
 
 module Minesweeper
