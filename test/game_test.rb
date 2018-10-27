@@ -61,127 +61,19 @@ module Minesweeper
           +-+-+-+-+
         RESULT
       end
-    end
 
-    describe 'Place a flag on a cell' do
-      before do
-        subject.place_flag(3, 2)
-      end
-
-      it 'decrements the mine count' do
-        subject.mine_count.must_equal(-1)
-      end
-
-      it 'updates the game board' do
-        subject.to_s.must_equal <<~RESULT
-          Game: 😀, Mines: -1
-          ====================
-
-          +-+-+-+-+
-          |?|?|?|?|
-          +-+-+-+-+
-          |?|?|?|?|
-          +-+-+-+-+
-          |?|?|?|?|
-          +-+-+-+-+
-          |?|?|🚩|?|
-          +-+-+-+-+
-        RESULT
-      end
-
-      describe 'Place flag on flagged cell' do
+      describe 'Place a flag on a cell' do
         before do
           subject.place_flag(3, 2)
         end
 
-        it 'does not change the mine count' do
-          subject.mine_count.must_equal(-1)
-        end
-
-        it 'does not update the game board' do
-          subject.to_s.must_equal <<~RESULT
-            Game: 😀, Mines: -1
-            ====================
-
-            +-+-+-+-+
-            |?|?|?|?|
-            +-+-+-+-+
-            |?|?|?|?|
-            +-+-+-+-+
-            |?|?|?|?|
-            +-+-+-+-+
-            |?|?|🚩|?|
-            +-+-+-+-+
-          RESULT
-        end
-      end
-
-      describe 'Place multiple flags' do
-        before do
-          subject.place_flag(2, 3)
-        end
-
         it 'decrements the mine count' do
-          subject.mine_count.must_equal(-2)
+          subject.mine_count.must_equal(3)
         end
 
         it 'updates the game board' do
           subject.to_s.must_equal <<~RESULT
-            Game: 😀, Mines: -2
-            ====================
-
-            +-+-+-+-+
-            |?|?|?|?|
-            +-+-+-+-+
-            |?|?|?|?|
-            +-+-+-+-+
-            |?|?|?|🚩|
-            +-+-+-+-+
-            |?|?|🚩|?|
-            +-+-+-+-+
-          RESULT
-        end
-      end
-
-      describe 'remove a flag' do
-        before do
-          subject.remove_flag(3, 2)
-        end
-
-        it 'increments the mine count' do
-          subject.mine_count.must_equal(0)
-        end
-
-        it 'updates the game board' do
-          subject.to_s.must_equal <<~RESULT
-            Game: 😀, Mines: 0
-            ====================
-
-            +-+-+-+-+
-            |?|?|?|?|
-            +-+-+-+-+
-            |?|?|?|?|
-            +-+-+-+-+
-            |?|?|?|?|
-            +-+-+-+-+
-            |?|?|?|?|
-            +-+-+-+-+
-          RESULT
-        end
-      end
-
-      describe 'Remove flag from unflagged cell' do
-        before do
-          subject.remove_flag(2, 3)
-        end
-
-        it 'does not change the mine count' do
-          subject.mine_count.must_equal(-1)
-        end
-
-        it 'game board stays the same' do
-          subject.to_s.must_equal <<~RESULT
-            Game: 😀, Mines: -1
+            Game: 😀, Mines: 3
             ====================
 
             +-+-+-+-+
@@ -194,6 +86,114 @@ module Minesweeper
             |?|?|🚩|?|
             +-+-+-+-+
           RESULT
+        end
+
+        describe 'Place flag on flagged cell' do
+          before do
+            subject.place_flag(3, 2)
+          end
+
+          it 'does not change the mine count' do
+            subject.mine_count.must_equal(3)
+          end
+
+          it 'does not update the game board' do
+            subject.to_s.must_equal <<~RESULT
+              Game: 😀, Mines: 3
+              ====================
+
+              +-+-+-+-+
+              |?|?|?|?|
+              +-+-+-+-+
+              |?|?|?|?|
+              +-+-+-+-+
+              |?|?|?|?|
+              +-+-+-+-+
+              |?|?|🚩|?|
+              +-+-+-+-+
+            RESULT
+          end
+        end
+
+        describe 'Place multiple flags' do
+          before do
+            subject.place_flag(2, 3)
+          end
+
+          it 'decrements the mine count' do
+            subject.mine_count.must_equal(2)
+          end
+
+          it 'updates the game board' do
+            subject.to_s.must_equal <<~RESULT
+              Game: 😀, Mines: 2
+              ====================
+
+              +-+-+-+-+
+              |?|?|?|?|
+              +-+-+-+-+
+              |?|?|?|?|
+              +-+-+-+-+
+              |?|?|?|🚩|
+              +-+-+-+-+
+              |?|?|🚩|?|
+              +-+-+-+-+
+            RESULT
+          end
+        end
+
+        describe 'remove a flag' do
+          before do
+            subject.remove_flag(3, 2)
+          end
+
+          it 'increments the mine count' do
+            subject.mine_count.must_equal(4)
+          end
+
+          it 'updates the game board' do
+            subject.to_s.must_equal <<~RESULT
+              Game: 😀, Mines: 4
+              ====================
+
+              +-+-+-+-+
+              |?|?|?|?|
+              +-+-+-+-+
+              |?|?|?|?|
+              +-+-+-+-+
+              |?|?|?|?|
+              +-+-+-+-+
+              |?|?|?|?|
+              +-+-+-+-+
+            RESULT
+          end
+        end
+
+        describe 'Remove flag from unflagged cell' do
+          before do
+            subject.remove_flag(2, 3)
+          end
+
+          it 'does not change the mine count' do
+            subject.mine_count.must_equal(3)
+          end
+
+          it 'game board stays the same' do
+            subject.to_s.must_equal <<~RESULT
+              Game: 😀, Mines: 3
+              ====================
+
+              +-+-+-+-+
+              |?|?|?|?|
+              +-+-+-+-+
+              |?|?|?|?|
+              +-+-+-+-+
+              |?|?|?|?|
+              +-+-+-+-+
+              |?|?|🚩|?|
+              +-+-+-+-+
+            RESULT
+          end
         end
       end
     end
