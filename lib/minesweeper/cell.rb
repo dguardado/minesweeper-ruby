@@ -5,6 +5,7 @@ module Minesweeper
   class Cell
     def initialize
       @flagged = false
+      @mined = false
     end
 
     def flagged?
@@ -25,6 +26,18 @@ module Minesweeper
         true
       else
         false
+      end
+    end
+
+    def mined?
+      @mined
+    end
+
+    def place_mine
+      if mined?
+        false
+      else
+        @mined = true
       end
     end
 

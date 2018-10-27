@@ -14,6 +14,13 @@ module Minesweeper
       @board = new_board
     end
 
+    def place_mines(*locations)
+      locations.each do |row, col|
+        changed = @board[row][col].place_mine
+        @mine_count += 1 if changed
+      end
+    end
+
     def place_flag(row, col)
       changed = @board[row][col].place_flag
       @mine_count -= 1 if changed
@@ -34,6 +41,16 @@ module Minesweeper
       result << "\n"
       result << format_board
       result.freeze
+    end
+
+    def random_locations(mine_count)
+      locations = Set.new
+      until locations.length >= mine_count
+        row = rand(@height)
+        col = rand(@width)
+        locations << [row, col]
+      end
+      locations.to_a
     end
 
     private

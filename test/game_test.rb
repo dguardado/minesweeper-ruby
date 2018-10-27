@@ -36,6 +36,33 @@ module Minesweeper
       end
     end
 
+    describe 'place mines' do
+      before do
+        subject.place_mines([1, 3], [0, 1], [2, 0], [3, 2])
+      end
+
+      it 'should have 4 mines' do
+        subject.mine_count.must_equal(4)
+      end
+
+      it 'should print a completely hidden grid' do
+        subject.to_s.must_equal <<~RESULT
+          Game: 😀, Mines: 4
+          ====================
+
+          +-+-+-+-+
+          |?|?|?|?|
+          +-+-+-+-+
+          |?|?|?|?|
+          +-+-+-+-+
+          |?|?|?|?|
+          +-+-+-+-+
+          |?|?|?|?|
+          +-+-+-+-+
+        RESULT
+      end
+    end
+
     describe 'Place a flag on a cell' do
       before do
         subject.place_flag(3, 2)
