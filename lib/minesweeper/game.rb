@@ -95,13 +95,13 @@ module Minesweeper
     private
 
     ICONS = {
-      in_progress: '😀',
-      win: '😎',
-      lose: '😭',
-      flagged: '🚩',
-      mined: '💣',
-      wrong: '❌',
-      boom: '💥',
+      in_progress: '^-^',
+      win: 'B-D',
+      lose: ';_;',
+      flagged: '>',
+      mined: 'Q',
+      wrong: 'X',
+      boom: '*',
       unknown: '?',
       0 => ' '
     }.freeze

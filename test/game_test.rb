@@ -20,7 +20,7 @@ module Minesweeper
 
       it 'must print a completely hidden grid' do
         subject.to_s.must_equal <<~RESULT
-          Game: 😀, Mines: 0
+          Game: ^-^, Mines: 0
           ====================
 
           +-+-+-+-+
@@ -47,7 +47,7 @@ module Minesweeper
 
       it 'should print a completely hidden grid' do
         subject.to_s.must_equal <<~RESULT
-          Game: 😀, Mines: 4
+          Game: ^-^, Mines: 4
           ====================
 
           +-+-+-+-+
@@ -73,17 +73,17 @@ module Minesweeper
 
         it 'updates the game board' do
           subject.to_s.must_equal <<~RESULT
-            Game: 😭, Mines: 4
+            Game: ;_;, Mines: 4
             ====================
 
             +-+-+-+-+
-            |?|💣|?|?|
+            |?|Q|?|?|
             +-+-+-+-+
-            |?|?|?|💣|
+            |?|?|?|Q|
             +-+-+-+-+
-            |💥|?|?|?|
+            |*|?|?|?|
             +-+-+-+-+
-            |?|?|💣|?|
+            |?|?|Q|?|
             +-+-+-+-+
           RESULT
         end
@@ -100,7 +100,7 @@ module Minesweeper
 
         it 'updates the game board' do
           subject.to_s.must_equal <<~RESULT
-            Game: 😀, Mines: 4
+            Game: ^-^, Mines: 4
             ====================
 
             +-+-+-+-+
@@ -139,17 +139,17 @@ module Minesweeper
 
         it 'updates the game board' do
           subject.to_s.must_equal <<~RESULT
-            Game: 😎, Mines: 0
+            Game: B-D, Mines: 0
             ====================
 
             +-+-+-+-+
-            |1|🚩|2|1|
+            |1|>|2|1|
             +-+-+-+-+
-            |2|2|2|🚩|
+            |2|2|2|>|
             +-+-+-+-+
-            |🚩|2|2|2|
+            |>|2|2|2|
             +-+-+-+-+
-            |1|2|🚩|1|
+            |1|2|>|1|
             +-+-+-+-+
           RESULT
         end
@@ -166,7 +166,7 @@ module Minesweeper
 
         it 'updates the game board' do
           subject.to_s.must_equal <<~RESULT
-            Game: 😀, Mines: 3
+            Game: ^-^, Mines: 3
             ====================
 
             +-+-+-+-+
@@ -176,7 +176,7 @@ module Minesweeper
             +-+-+-+-+
             |?|?|?|?|
             +-+-+-+-+
-            |?|?|🚩|?|
+            |?|?|>|?|
             +-+-+-+-+
           RESULT
         end
@@ -192,7 +192,7 @@ module Minesweeper
 
           it 'does not update the game board' do
             subject.to_s.must_equal <<~RESULT
-              Game: 😀, Mines: 3
+              Game: ^-^, Mines: 3
               ====================
 
               +-+-+-+-+
@@ -202,7 +202,7 @@ module Minesweeper
               +-+-+-+-+
               |?|?|?|?|
               +-+-+-+-+
-              |?|?|🚩|?|
+              |?|?|>|?|
               +-+-+-+-+
             RESULT
           end
@@ -219,7 +219,7 @@ module Minesweeper
 
           it 'updates the game board' do
             subject.to_s.must_equal <<~RESULT
-              Game: 😀, Mines: 2
+              Game: ^-^, Mines: 2
               ====================
 
               +-+-+-+-+
@@ -227,9 +227,9 @@ module Minesweeper
               +-+-+-+-+
               |?|?|?|?|
               +-+-+-+-+
-              |?|?|?|🚩|
+              |?|?|?|>|
               +-+-+-+-+
-              |?|?|🚩|?|
+              |?|?|>|?|
               +-+-+-+-+
             RESULT
           end
@@ -246,7 +246,7 @@ module Minesweeper
 
           it 'updates the game board' do
             subject.to_s.must_equal <<~RESULT
-              Game: 😀, Mines: 4
+              Game: ^-^, Mines: 4
               ====================
 
               +-+-+-+-+
@@ -273,7 +273,7 @@ module Minesweeper
 
           it 'game board stays the same' do
             subject.to_s.must_equal <<~RESULT
-              Game: 😀, Mines: 3
+              Game: ^-^, Mines: 3
               ====================
 
               +-+-+-+-+
@@ -283,7 +283,7 @@ module Minesweeper
               +-+-+-+-+
               |?|?|?|?|
               +-+-+-+-+
-              |?|?|🚩|?|
+              |?|?|>|?|
               +-+-+-+-+
             RESULT
           end
@@ -320,7 +320,7 @@ module Minesweeper
 
       it 'should reveal neighbors' do
         subject.to_s.must_equal <<~RESULT
-          Game: 😀, Mines: 10
+          Game: ^-^, Mines: 10
           ====================
 
           +-+-+-+-+-+-+-+-+-+
@@ -364,17 +364,17 @@ module Minesweeper
 
         it 'should win the game' do
           subject.to_s.must_equal <<~RESULT
-            Game: 😀, Mines: 6
+            Game: ^-^, Mines: 6
             ====================
 
             +-+-+-+-+-+-+-+-+-+
-            | |2|🚩|2| | | | | |
+            | |2|>|2| | | | | |
             +-+-+-+-+-+-+-+-+-+
-            | |2|🚩|2| | | |1|1|
+            | |2|>|2| | | |1|1|
             +-+-+-+-+-+-+-+-+-+
-            | |1|1|2|1|1| |1|🚩|
+            | |1|1|2|1|1| |1|>|
             +-+-+-+-+-+-+-+-+-+
-            |1|2|1|2|🚩|1| |1|1|
+            |1|2|1|2|>|1| |1|1|
             +-+-+-+-+-+-+-+-+-+
             |?|?|?|?|?|2| | | |
             +-+-+-+-+-+-+-+-+-+
