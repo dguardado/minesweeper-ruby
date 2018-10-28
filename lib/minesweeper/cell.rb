@@ -7,6 +7,7 @@ module Minesweeper
       @flagged = false
       @mined = false
       @revealed = false
+      @neighboring_mines = 0
     end
 
     def flagged?
@@ -52,22 +53,42 @@ module Minesweeper
 
     def state(game_state)
       case game_state
-      when :lose
-        lost_state
+      when :in_progress
+        hidden_state
+      when :win
+        win_state
       else
-        good_state
+        lose_state
       end
     end
 
-    def good_state
+    def mark_neighboring_mine
+      @neighboring_mines += 1
+    end
+
+    private
+
+    def hidden_state
       if flagged?
         :flagged
+      elsif revealed?
+        @neighboring_mines
       else
         :unknown
       end
     end
 
-    def lost_state
+    def win_state
+      if flagged? || mined?
+        :flagged
+      elsif revealed?
+        @neighboring_mines
+      else
+        :unknown
+      end
+    end
+
+    def lose_state
       case [revealed?, flagged?, mined?]
       when [true, false, true]
         :boom

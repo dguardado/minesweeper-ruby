@@ -4,7 +4,6 @@
 module Minesweeper
   class Game
     attr_reader :state
-    attr_reader :mine_count
 
     def initialize(height, width)
       @state = :in_progress
@@ -12,21 +11,44 @@ module Minesweeper
       @height = height
       @width = width
       @board = new_board
+      @revealed = 0
+    end
+
+    def mine_count
+      if state == :win
+        0
+      else
+        @mine_count
+      end
     end
 
     def place_mines(*locations)
       locations.each do |row, col|
         changed = @board[row][col].place_mine
-        @mine_count += 1 if changed
+        if changed
+          @mine_count += 1
+          mark_neighbors(row, col)
+        end
       end
     end
 
-    def reveal(row, col)
-      cell = @board[row][col]
-      cell.reveal
-      if cell.mined?
-        @state = :lose
+    def reveal(*locations)
+      locations.each do |row, col|
+        cell = @board[row][col]
+        cell.reveal
+        @revealed += 1
+        if cell.mined?
+          @state = :lose
+        elsif won?
+          @state = :win
+        end
       end
+    end
+
+    def won?
+      board_size = @width * @height
+      unrevealed = board_size - @revealed
+      unrevealed == @mine_count
     end
 
     def place_flag(row, col)
@@ -126,7 +148,28 @@ module Minesweeper
 
     def format_cell(cell)
       cell_state = cell.state(@state)
-      ICONS[cell_state]
+      ICONS[cell_state] || cell_state
+    end
+
+    def mark_neighbors(row, col)
+      neighbors(row, col).each do |nrow, ncol|
+        @board[nrow][ncol].mark_neighboring_mine
+      end
+    end
+
+    def neighbors(row, col)
+      locations = []
+
+      rows = [row - 1, row, row + 1].select { |r| (0...@height).cover?(r) }
+      cols = [col - 1, col, col + 1].select { |c| (0...@width).cover?(c) }
+
+      rows.each do |nrow|
+        cols.each do |ncol|
+          locations << [nrow, ncol] unless [nrow, ncol] == [row, col]
+        end
+      end
+
+      locations
     end
   end
 end

@@ -64,7 +64,7 @@ module Minesweeper
 
       describe 'Reveal a mine' do
         before do
-          subject.reveal(2, 0)
+          subject.reveal([2, 0])
         end
 
         it 'should lose the game' do
@@ -84,6 +84,72 @@ module Minesweeper
             |💥|?|?|?|
             +-+-+-+-+
             |?|?|💣|?|
+            +-+-+-+-+
+          RESULT
+        end
+      end
+
+      describe 'Reveal a non-mine' do
+        before do
+          subject.reveal([0, 0], [2, 2])
+        end
+
+        it 'should not change game state' do
+          subject.state.must_equal(:in_progress)
+        end
+
+        it 'updates the game board' do
+          subject.to_s.must_equal <<~RESULT
+            Game: 😀, Mines: 4
+            ====================
+
+            +-+-+-+-+
+            |1|?|?|?|
+            +-+-+-+-+
+            |?|?|?|?|
+            +-+-+-+-+
+            |?|?|2|?|
+            +-+-+-+-+
+            |?|?|?|?|
+            +-+-+-+-+
+          RESULT
+        end
+      end
+
+      describe 'Reveal all non mines' do
+        before do
+          subject.reveal(
+            [0, 0],
+            [0, 2],
+            [0, 3],
+            [1, 0],
+            [1, 1],
+            [1, 2],
+            [2, 1],
+            [2, 2],
+            [2, 3],
+            [3, 0],
+            [3, 1],
+            [3, 3])
+        end
+
+        it 'should win the game' do
+          subject.state.must_equal(:win)
+        end
+
+        it 'updates the game board' do
+          subject.to_s.must_equal <<~RESULT
+            Game: 😎, Mines: 0
+            ====================
+
+            +-+-+-+-+
+            |1|🚩|2|1|
+            +-+-+-+-+
+            |2|2|2|🚩|
+            +-+-+-+-+
+            |🚩|2|2|2|
+            +-+-+-+-+
+            |1|2|🚩|1|
             +-+-+-+-+
           RESULT
         end

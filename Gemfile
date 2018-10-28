@@ -5,6 +5,7 @@ ruby '>=2.5.3'
 
 gem 'commander'
 
+gem 'pry', group: :development
 gem 'rake', group: :development
 gem 'rubocop', group: :development
 
