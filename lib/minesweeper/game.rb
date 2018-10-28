@@ -21,6 +21,14 @@ module Minesweeper
       end
     end
 
+    def reveal(row, col)
+      cell = @board[row][col]
+      cell.reveal
+      if cell.mined?
+        @state = :lose
+      end
+    end
+
     def place_flag(row, col)
       changed = @board[row][col].place_flag
       @mine_count -= 1 if changed
@@ -55,6 +63,18 @@ module Minesweeper
 
     private
 
+    ICONS = {
+      in_progress: '😀',
+      win: '😎',
+      lose: '😭',
+      flagged: '🚩',
+      mined: '💣',
+      wrong: '❌',
+      boom: '💥',
+      unknown: '?',
+      no_mines: ' '
+    }
+
     def new_board
       board = []
       @height.times do
@@ -69,9 +89,13 @@ module Minesweeper
 
     def format_state
       <<~RESULT
-        Game: 😀, Mines: #{@mine_count}
+        Game: #{state_icon}, Mines: #{mine_count}
         ====================
       RESULT
+    end
+
+    def state_icon
+      ICONS[@state]
     end
 
     def format_board
@@ -94,10 +118,15 @@ module Minesweeper
     def format_row(row)
       result = +'|'
       row.each do |cell|
-        result << "#{cell.format}|"
+        result << "#{format_cell(cell)}|"
       end
       result << "\n"
       result.freeze
+    end
+
+    def format_cell(cell)
+      cell_state = cell.state(@state)
+      ICONS[cell_state]
     end
   end
 end

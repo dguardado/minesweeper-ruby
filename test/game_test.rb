@@ -62,6 +62,33 @@ module Minesweeper
         RESULT
       end
 
+      describe 'Reveal a mine' do
+        before do
+          subject.reveal(2, 0)
+        end
+
+        it 'should lose the game' do
+          subject.state.must_equal(:lose)
+        end
+
+        it 'updates the game board' do
+          subject.to_s.must_equal <<~RESULT
+            Game: 😭, Mines: 4
+            ====================
+
+            +-+-+-+-+
+            |?|💣|?|?|
+            +-+-+-+-+
+            |?|?|?|💣|
+            +-+-+-+-+
+            |💥|?|?|?|
+            +-+-+-+-+
+            |?|?|💣|?|
+            +-+-+-+-+
+          RESULT
+        end
+      end
+
       describe 'Place a flag on a cell' do
         before do
           subject.place_flag(3, 2)

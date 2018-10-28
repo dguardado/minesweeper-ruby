@@ -6,6 +6,7 @@ module Minesweeper
     def initialize
       @flagged = false
       @mined = false
+      @revealed = false
     end
 
     def flagged?
@@ -41,11 +42,45 @@ module Minesweeper
       end
     end
 
-    def format
-      if flagged?
-        '🚩'
+    def revealed?
+      @revealed
+    end
+
+    def reveal
+      @revealed = true
+    end
+
+    def state(game_state)
+      case game_state
+      when :lose
+        lost_state
       else
-        '?'
+        good_state
+      end
+    end
+
+    def good_state
+      if flagged?
+        :flagged
+      else
+        :unknown
+      end
+    end
+
+    def lost_state
+      case [revealed?, flagged?, mined?]
+      when [true, false, true]
+        :boom
+      when [false, true, true]
+        :flagged
+      when [false, true, false]
+        :wrong
+      when [false, false, true]
+        :mined
+      when [false, false, false]
+        :unknown
+      else
+        :no_mines
       end
     end
   end
