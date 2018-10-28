@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Load Bundler and load all your gems
 require 'bundler/setup'
 
@@ -6,6 +8,7 @@ require 'bundler/setup'
 require 'minesweeper/version'
 require 'minesweeper/cell'
 require 'minesweeper/game'
+require 'minesweeper/game_view'
 
 module Minesweeper
   # Your code goes here...

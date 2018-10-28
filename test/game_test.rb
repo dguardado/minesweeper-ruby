@@ -7,17 +7,10 @@ require 'minesweeper'
 
 module Minesweeper
   describe Game do
-    subject { Game.new(4, 4) }
+    let(:game) { Game.new(4, 4) }
+    subject { GameView.ascii(game) }
 
     describe 'initial state' do
-      it 'must start with state in-progress' do
-        subject.state.must_equal(:in_progress)
-      end
-
-      it 'must start with 0 mines' do
-        subject.mine_count.must_equal(0)
-      end
-
       it 'must print a completely hidden grid' do
         subject.to_s.must_equal <<~RESULT
           Game: ^-^, Mines: 0
@@ -38,11 +31,7 @@ module Minesweeper
 
     describe 'place mines' do
       before do
-        subject.place_mines([1, 3], [0, 1], [2, 0], [3, 2])
-      end
-
-      it 'should have 4 mines' do
-        subject.mine_count.must_equal(4)
+        game.place_mines([1, 3], [0, 1], [2, 0], [3, 2])
       end
 
       it 'should print a completely hidden grid' do
@@ -64,11 +53,7 @@ module Minesweeper
 
       describe 'Reveal a mine' do
         before do
-          subject.reveal([2, 0])
-        end
-
-        it 'should lose the game' do
-          subject.state.must_equal(:lose)
+          game.reveal([2, 0])
         end
 
         it 'updates the game board' do
@@ -91,11 +76,7 @@ module Minesweeper
 
       describe 'Reveal a non-mine' do
         before do
-          subject.reveal([0, 0], [2, 2])
-        end
-
-        it 'should not change game state' do
-          subject.state.must_equal(:in_progress)
+          game.reveal([0, 0], [2, 2])
         end
 
         it 'updates the game board' do
@@ -118,7 +99,7 @@ module Minesweeper
 
       describe 'Reveal all non mines' do
         before do
-          subject.reveal(
+          game.reveal(
             [0, 0],
             [0, 2],
             [0, 3],
@@ -131,10 +112,6 @@ module Minesweeper
             [3, 0],
             [3, 1],
             [3, 3])
-        end
-
-        it 'should win the game' do
-          subject.state.must_equal(:win)
         end
 
         it 'updates the game board' do
@@ -157,11 +134,7 @@ module Minesweeper
 
       describe 'Place a flag on a cell' do
         before do
-          subject.place_flags([3, 2])
-        end
-
-        it 'decrements the mine count' do
-          subject.mine_count.must_equal(3)
+          game.place_flags([3, 2])
         end
 
         it 'updates the game board' do
@@ -183,11 +156,7 @@ module Minesweeper
 
         describe 'Place flag on flagged cell' do
           before do
-            subject.place_flags([3, 2])
-          end
-
-          it 'does not change the mine count' do
-            subject.mine_count.must_equal(3)
+            game.place_flags([3, 2])
           end
 
           it 'does not update the game board' do
@@ -210,11 +179,7 @@ module Minesweeper
 
         describe 'Place multiple flags' do
           before do
-            subject.place_flags([2, 3])
-          end
-
-          it 'decrements the mine count' do
-            subject.mine_count.must_equal(2)
+            game.place_flags([2, 3])
           end
 
           it 'updates the game board' do
@@ -237,14 +202,10 @@ module Minesweeper
 
         describe 'remove a flag' do
           before do
-            subject.remove_flag(3, 2)
+            game.remove_flag(3, 2)
           end
 
-          it 'increments the mine count' do
-            subject.mine_count.must_equal(4)
-          end
-
-          it 'updates the game board' do
+          it 'decrements the mine count' do
             subject.to_s.must_equal <<~RESULT
               Game: ^-^, Mines: 4
               ====================
@@ -264,14 +225,10 @@ module Minesweeper
 
         describe 'Remove flag from unflagged cell' do
           before do
-            subject.remove_flag(2, 3)
+            game.remove_flag(2, 3)
           end
 
           it 'does not change the mine count' do
-            subject.mine_count.must_equal(3)
-          end
-
-          it 'game board stays the same' do
             subject.to_s.must_equal <<~RESULT
               Game: ^-^, Mines: 3
               ====================
@@ -293,10 +250,11 @@ module Minesweeper
   end
 
   describe 'beginner game' do
-    subject { Game.new(9, 9) }
+    let(:game) { Game.new(9, 9) }
+    subject { GameView.ascii(game) }
 
     before do
-      subject.place_mines(
+      game.place_mines(
         [0, 2],
         [1, 2],
         [2, 8],
@@ -312,7 +270,7 @@ module Minesweeper
 
     describe 'recursive reveal' do
       before do
-        subject.reveal(
+        game.reveal(
           [0, 8],
           [2, 0],
           [8, 3]
@@ -348,7 +306,7 @@ module Minesweeper
 
       describe 'flag and win' do
         before do
-          subject.place_flags(
+          game.place_flags(
             [0, 2],
             [1, 2],
             [2, 8],
@@ -358,7 +316,7 @@ module Minesweeper
             [8, 1]
           )
 
-          subject.reveal(
+          game.reveal(
             [2, 2],
             [3, 2],
             [3, 3],
@@ -366,9 +324,9 @@ module Minesweeper
             [8, 6]
           )
 
-          subject.place_flags([5, 4])
+          game.place_flags([5, 4])
 
-          subject.reveal(
+          game.reveal(
             [4, 3],
             [5, 0],
             [5, 1],
@@ -380,7 +338,7 @@ module Minesweeper
             [8, 0]
           )
 
-          subject.place_flags([4, 2])
+          game.place_flags([4, 2])
         end
 
         it 'should get close to winning' do
@@ -411,8 +369,8 @@ module Minesweeper
         end
 
         it 'can win in 2 moves by flagging revealing' do
-          subject.place_flags([4, 0])
-          subject.reveal([4, 1])
+          game.place_flags([4, 0])
+          game.reveal([4, 1])
 
           subject.to_s.must_equal <<~RESULT
             Game: B-D, Mines: 0
@@ -441,7 +399,7 @@ module Minesweeper
         end
 
         it 'can win in 1 move by revealing' do
-          subject.reveal([4, 1])
+          game.reveal([4, 1])
 
           subject.to_s.must_equal <<~RESULT
             Game: B-D, Mines: 0
@@ -470,7 +428,7 @@ module Minesweeper
         end
 
         it 'can lose in 1 move by revealing' do
-          subject.reveal([4, 0])
+          game.reveal([4, 0])
 
           subject.to_s.must_equal <<~RESULT
             Game: ;_;, Mines: 1
@@ -499,7 +457,7 @@ module Minesweeper
         end
 
         it 'game continues if flag the wrong location' do
-          subject.place_flags([4, 1])
+          game.place_flags([4, 1])
 
           subject.to_s.must_equal <<~RESULT
             Game: ^-^, Mines: 0
@@ -528,8 +486,8 @@ module Minesweeper
         end
 
         it 'can lose in 2 move by placing the wrong flag then revealing' do
-          subject.place_flags([4, 1])
-          subject.reveal([4, 0])
+          game.place_flags([4, 1])
+          game.reveal([4, 0])
 
           subject.to_s.must_equal <<~RESULT
             Game: ;_;, Mines: 0

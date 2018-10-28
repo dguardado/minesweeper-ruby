@@ -4,6 +4,9 @@
 module Minesweeper
   class Game
     attr_reader :state
+    attr_reader :board
+    attr_reader :height
+    attr_reader :width
 
     def initialize(height, width)
       @state = :in_progress
@@ -80,14 +83,6 @@ module Minesweeper
       state != :in_progress
     end
 
-    def to_s
-      result = +''
-      result << format_state
-      result << "\n"
-      result << format_board
-      result.freeze
-    end
-
     def random_locations(mine_count)
       locations = Set.new
       until locations.length >= mine_count
@@ -100,18 +95,6 @@ module Minesweeper
 
     private
 
-    ICONS = {
-      in_progress: '^-^',
-      win: 'B-D',
-      lose: ';_;',
-      flagged: '>',
-      mined: 'Q',
-      wrong: 'X',
-      boom: '*',
-      unknown: '?',
-      0 => ' '
-    }.freeze
-
     def new_board
       board = []
       @height.times do
@@ -122,48 +105,6 @@ module Minesweeper
         board << row
       end
       board
-    end
-
-    def format_state
-      <<~RESULT
-        Game: #{state_icon}, Mines: #{mine_count}
-        ====================
-      RESULT
-    end
-
-    def state_icon
-      ICONS[@state]
-    end
-
-    def format_board
-      result = +''
-      result << format_board_separator
-      @board.each do |row|
-        result << format_row(row)
-        result << format_board_separator
-      end
-      result.freeze
-    end
-
-    def format_board_separator
-      sep = +'+'
-      @width.times { sep << '-+' }
-      sep << "\n"
-      sep.freeze
-    end
-
-    def format_row(row)
-      result = +'|'
-      row.each do |cell|
-        result << "#{format_cell(cell)}|"
-      end
-      result << "\n"
-      result.freeze
-    end
-
-    def format_cell(cell)
-      cell_state = cell.state(@state)
-      ICONS[cell_state] || cell_state
     end
 
     def mark_neighbors(row, col)
@@ -185,10 +126,6 @@ module Minesweeper
       end
 
       locations
-    end
-
-    def cell(row, col)
-      @board[row][col]
     end
   end
 end

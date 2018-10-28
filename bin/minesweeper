@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 $LOAD_PATH << File.expand_path(File.dirname(__FILE__) + '/../lib')
+
 require 'set'
 require 'commander'
 require 'minesweeper'
@@ -16,8 +17,12 @@ Commander.configure do
       game = Minesweeper::Game.new(9, 9)
       locations = game.random_locations(10)
       game.place_mines(*locations)
+
+      view = Minesweeper::GameView.emoji(game)
+
       until game.over?
-        say game.to_s
+        say view
+
         user_action = choose('What would you like to do?',
                              :reveal, :place_flag, :remove_flag)
 
@@ -36,7 +41,7 @@ Commander.configure do
         end
       end
 
-      say game.to_s
+      say view
     end
   end
 
