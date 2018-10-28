@@ -13,6 +13,9 @@ module Minesweeper
       wrong: 'X',
       boom: '*',
       unknown: '?',
+      corner: '+',
+      h_separator: '-',
+      v_separator: '|',
       0 => ' '
     }.freeze
 
@@ -25,7 +28,10 @@ module Minesweeper
       wrong: '❌',
       boom: '💥',
       unknown: '❔',
-      0 => '⏹ ',
+      corner: '➕',
+      h_separator: '➖',
+      v_separator: ' |',
+      0 => '  ',
       1 => '1️⃣ ',
       2 => '2️⃣ ',
       3 => '3️⃣ ',
@@ -81,16 +87,22 @@ module Minesweeper
     end
 
     def format_board_separator
-      sep = +'+'
-      @game.width.times { sep << '-+' }
+      sep = +''
+      sep << @icons[:corner]
+      @game.width.times do
+        sep << @icons[:h_separator]
+        sep << @icons[:corner]
+      end
       sep << "\n"
       sep.freeze
     end
 
     def format_row(row)
-      result = +'|'
+      result = +''
+      result << @icons[:v_separator]
       row.each do |cell|
-        result << "#{format_cell(cell)}|"
+        result << format_cell(cell)
+        result << @icons[:v_separator]
       end
       result << "\n"
       result.freeze
@@ -98,7 +110,7 @@ module Minesweeper
 
     def format_cell(cell)
       cell_state = cell.state(@game.state)
-      @icons[cell_state] || cell_state
+      @icons[cell_state] || cell_state.to_s
     end
   end
 end
