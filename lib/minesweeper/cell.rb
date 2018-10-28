@@ -100,6 +100,8 @@ module Minesweeper
       case [revealed?, flagged?, mined?]
       when [true, false, true]
         :boom
+      when [true, false, false]
+        @neighboring_mines
       when [false, true, true]
         :flagged
       when [false, true, false]
@@ -108,8 +110,6 @@ module Minesweeper
         :mined
       when [false, false, false]
         :unknown
-      else
-        :no_mines
       end
     end
   end

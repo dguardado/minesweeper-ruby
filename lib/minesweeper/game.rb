@@ -8,6 +8,7 @@ module Minesweeper
     def initialize(height, width)
       @state = :in_progress
       @mine_count = 0
+      @flag_count = 0
       @height = height
       @width = width
       @board = new_board
@@ -18,8 +19,12 @@ module Minesweeper
       if state == :win
         0
       else
-        @mine_count
+        flags_left
       end
+    end
+
+    def flags_left
+      @mine_count - @flag_count
     end
 
     def place_mines(*locations)
@@ -55,19 +60,20 @@ module Minesweeper
     def won?
       board_size = @width * @height
       unrevealed = board_size - @revealed
+
       unrevealed == @mine_count
     end
 
     def place_flags(*locations)
       locations.each do |row, col|
         changed = @board[row][col].place_flag
-        @mine_count -= 1 if changed
+        @flag_count += 1 if changed
       end
     end
 
     def remove_flag(row, col)
       changed = @board[row][col].remove_flag
-      @mine_count += 1 if changed
+      @flag_count -= 1 if changed
     end
 
     def over?
