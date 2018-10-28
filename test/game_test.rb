@@ -157,7 +157,7 @@ module Minesweeper
 
       describe 'Place a flag on a cell' do
         before do
-          subject.place_flag(3, 2)
+          subject.place_flags([3, 2])
         end
 
         it 'decrements the mine count' do
@@ -183,7 +183,7 @@ module Minesweeper
 
         describe 'Place flag on flagged cell' do
           before do
-            subject.place_flag(3, 2)
+            subject.place_flags([3, 2])
           end
 
           it 'does not change the mine count' do
@@ -210,7 +210,7 @@ module Minesweeper
 
         describe 'Place multiple flags' do
           before do
-            subject.place_flag(2, 3)
+            subject.place_flags([2, 3])
           end
 
           it 'decrements the mine count' do
@@ -287,6 +287,106 @@ module Minesweeper
               +-+-+-+-+
             RESULT
           end
+        end
+      end
+    end
+  end
+
+  describe 'beginner game' do
+    subject { Game.new(9, 9) }
+
+    before do
+      subject.place_mines(
+        [0, 2],
+        [1, 2],
+        [2, 8],
+        [3, 4],
+        [4, 0],
+        [4, 2],
+        [5, 4],
+        [7, 1],
+        [7, 6],
+        [8, 1]
+      )
+    end
+
+    describe 'recursive reveal' do
+      before do
+        subject.reveal(
+          [0, 8],
+          [2, 0]
+        )
+      end
+
+      it 'should reveal neighbors' do
+        subject.to_s.must_equal <<~RESULT
+          Game: 😀, Mines: 10
+          ====================
+
+          +-+-+-+-+-+-+-+-+-+
+          | |2|?|2| | | | | |
+          +-+-+-+-+-+-+-+-+-+
+          | |2|?|2| | | |1|1|
+          +-+-+-+-+-+-+-+-+-+
+          | |1|?|2|1|1| |1|?|
+          +-+-+-+-+-+-+-+-+-+
+          |1|2|?|?|?|1| |1|1|
+          +-+-+-+-+-+-+-+-+-+
+          |?|?|?|?|?|2| | | |
+          +-+-+-+-+-+-+-+-+-+
+          |?|?|?|?|?|1| | | |
+          +-+-+-+-+-+-+-+-+-+
+          |?|?|?|?|?|2|1|1| |
+          +-+-+-+-+-+-+-+-+-+
+          |?|?|?|?|?|?|?|1| |
+          +-+-+-+-+-+-+-+-+-+
+          |?|?|?|?|?|?|?|1| |
+          +-+-+-+-+-+-+-+-+-+
+        RESULT
+      end
+
+      describe 'flag and win' do
+        before do
+          subject.place_flags(
+            [0, 2],
+            [1, 2],
+            [2, 8]
+          )
+
+          subject.reveal(
+            [2, 2],
+            [3, 2],
+            [3, 3]
+          )
+
+          subject.place_flags([3, 4])
+        end
+
+        it 'should win the game' do
+          subject.to_s.must_equal <<~RESULT
+            Game: 😀, Mines: 6
+            ====================
+
+            +-+-+-+-+-+-+-+-+-+
+            | |2|🚩|2| | | | | |
+            +-+-+-+-+-+-+-+-+-+
+            | |2|🚩|2| | | |1|1|
+            +-+-+-+-+-+-+-+-+-+
+            | |1|1|2|1|1| |1|🚩|
+            +-+-+-+-+-+-+-+-+-+
+            |1|2|1|2|🚩|1| |1|1|
+            +-+-+-+-+-+-+-+-+-+
+            |?|?|?|?|?|2| | | |
+            +-+-+-+-+-+-+-+-+-+
+            |?|?|?|?|?|1| | | |
+            +-+-+-+-+-+-+-+-+-+
+            |?|?|?|?|?|2|1|1| |
+            +-+-+-+-+-+-+-+-+-+
+            |?|?|?|?|?|?|?|1| |
+            +-+-+-+-+-+-+-+-+-+
+            |?|?|?|?|?|?|?|1| |
+            +-+-+-+-+-+-+-+-+-+
+          RESULT
         end
       end
     end

@@ -35,13 +35,20 @@ module Minesweeper
     def reveal(*locations)
       locations.each do |row, col|
         cell = @board[row][col]
-        cell.reveal
+        changed = cell.reveal
+
+        next unless changed
+
         @revealed += 1
+
         if cell.mined?
           @state = :lose
-        elsif won?
-          @state = :win
+          break
         end
+
+        reveal(*neighbors(row, col)) unless cell.neighboring_mines?
+
+        @state = :win if won?
       end
     end
 
@@ -51,9 +58,11 @@ module Minesweeper
       unrevealed == @mine_count
     end
 
-    def place_flag(row, col)
-      changed = @board[row][col].place_flag
-      @mine_count -= 1 if changed
+    def place_flags(*locations)
+      locations.each do |row, col|
+        changed = @board[row][col].place_flag
+        @mine_count -= 1 if changed
+      end
     end
 
     def remove_flag(row, col)
@@ -94,8 +103,8 @@ module Minesweeper
       wrong: '❌',
       boom: '💥',
       unknown: '?',
-      no_mines: ' '
-    }
+      0 => ' '
+    }.freeze
 
     def new_board
       board = []
@@ -170,6 +179,10 @@ module Minesweeper
       end
 
       locations
+    end
+
+    def cell(row, col)
+      @board[row][col]
     end
   end
 end

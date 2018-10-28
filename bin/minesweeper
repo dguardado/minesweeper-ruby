@@ -27,7 +27,7 @@ Commander.configure do
           game.reveal([row.to_i, col.to_i])
         when :place_flag
           row, col = ask_for_array "Where would you like to place your flag? Enter 'row col' eg '4 6':"
-          game.place_flag(row.to_i, col.to_i)
+          game.place_flags([row.to_i, col.to_i])
         when :remove_flag
           row, col = ask_for_array "What flag do you want to remove? Enter 'row col' eg '4 6':"
           game.remove_flag(row.to_i, col.to_i)

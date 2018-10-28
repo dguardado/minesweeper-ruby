@@ -48,7 +48,15 @@ module Minesweeper
     end
 
     def reveal
-      @revealed = true
+      if revealed?
+        false
+      else
+        @revealed = true
+      end
+    end
+
+    def neighboring_mines?
+      @neighboring_mines.positive?
     end
 
     def state(game_state)
