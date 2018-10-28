@@ -14,8 +14,23 @@ Commander.configure do
 
   command :new_game do |c|
     c.action do
-      game = Minesweeper::Game.new(9, 9)
-      locations = game.random_locations(10)
+
+      game_type = choose('Choose your level:',
+                         :beginner, :intermediate, :expert)
+
+      case game_type
+      when :beginner
+        game_params = [9, 9, 10]
+      when :intermediate
+        game_params = [16, 16, 40]
+      when :expert
+        game_params = [16, 30, 99]
+      end
+
+      height, width, mine_count = game_params
+
+      game = Minesweeper::Game.new(height, width)
+      locations = game.random_locations(mine_count)
       game.place_mines(*locations)
 
       view = Minesweeper::GameView.emoji(game)
